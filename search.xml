@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>Windows上git的CRLF和Linux上的LF问题</title>
+    <url>/post/8f0b4c11.html</url>
+    <content><![CDATA[<h1 id="git-warning-LF-will-be-replaced-by-CRLF-fatal-CRLF-would-be-replaced-by-LF"><a href="#git-warning-LF-will-be-replaced-by-CRLF-fatal-CRLF-would-be-replaced-by-LF" class="headerlink" title="[git] warning: LF will be replaced by CRLF | fatal: CRLF would be replaced by LF"></a><strong>[git] warning: LF will be replaced by CRLF | fatal: CRLF would be replaced by LF</strong></h1><p>遇到这两个错误，是因为Git的换行符检查功能。<br><code>core.safecrlf</code><br>Git提供了一个换行符检查功能（core.safecrlf），可以在提交时检查文件是否混用了不同风格的换行符。这个功能的选项如下：</p>
+<ul>
+<li>false - 不做任何检查</li>
+<li>warn - 在提交时检查并警告</li>
+<li>true - 在提交时检查，如果发现混用则拒绝提交<blockquote>
+<p>建议使用最严格的 true 选项。</p>
+</blockquote>
+</li>
+</ul>
+<p><code>core.autocrlf</code><br>假如你正在Windows上写程序，又或者你正在和其他人合作，他们在Windows上编程，而你却在其他系统上，在这些情况下，你可能会遇到行尾结束符问题。这是因为Windows使用回车和换行两个字符来结束一行，而Mac和Linux只使用换行一个字符。虽然这是小问题，但它会极大地扰乱跨平台协作。</p>
+<p>Git可以在你提交时自动地把行结束符CRLF转换成LF，而在签出代码时把LF转换成CRLF。用core.autocrlf来打开此项功能，如果是在Windows系统上，把它设置成true，这样当签出代码时，LF会被转换成CRLF：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> git config --global core.autocrlf true</span><br></pre></td></tr></table></figure>
+
+<p>Linux或Mac系统使用LF作为行结束符，因此你不想 Git 在签出文件时进行自动的转换；当一个以CRLF为行结束符的文件不小心被引入时你肯定想进行修正，把core.autocrlf设置成input来告诉 Git 在提交时把CRLF转换成LF，签出时不转换：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> git config --global core.autocrlf input</span><br></pre></td></tr></table></figure>
+
+<p>这样会在Windows系统上的签出文件中保留CRLF，会在Mac和Linux系统上，包括仓库中保留LF。</p>
+<p>如果你是Windows程序员，且正在开发仅运行在Windows上的项目，可以设置false取消此功能，把回车符记录在库中：</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">$</span> git config --global core.autocrlf false</span><br></pre></td></tr></table></figure>]]></content>
+  </entry>
+  <entry>
     <title>使用Hexo写作</title>
     <url>/post/8d286345.html</url>
     <content><![CDATA[<h1 id="写作"><a href="#写作" class="headerlink" title="写作"></a>写作</h1><p>你可以执行下列命令来创建一篇新文章或者新的页面。</p>
